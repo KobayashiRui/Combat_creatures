@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>controler.html</title>
+  </head>
+  <body id="target">
+    <p>iframeの内容</p>
+    <script type="text/javascript">
+        var input_key_buffer = new Array();
+        
+        document.onkeydown = function(e){
+            if(!e) e = window.event;
+            input_key_buffer[e.keyCode] = true;
+        }
+
+        document.onkeyup = function(e){
+            if(!e) e = window.event;
+            input_key_buffer[e.keyCode] = false;
+        }
+
+        function changeColor(idname,color){
+            var obj = document.getElementById(idname);
+            if(color == 0){
+                obj.style.backgroundColor = "#ffffff";
+            }else if(color == 1){
+            obj.style.backgroundColor = "#ff0000";
+            }
+        }
+
+        window.onblur = function(){
+            input_key_buffer.length = 0;
+            changeColor("target",0);
+        }
+        window.onfocus = function(){
+            changeColor("target",1);
+        }
+
+
+        function KeyIsDown(key_code){
+            if(input_key_buffer[key_code]){
+                return true;
+            }
+            return false;
+        }
+        
+        function POST_trans(key_code){
+                let form = document.createElement('form');
+                let request = document.createElement('input');
+             
+                form.method = 'POST';
+                form.action = './controler.html';
+             
+                request.type = 'hidden'; //入力フォームが表示されないように
+                request.name = 'text';
+                request.value = key_code;
+             
+                form.appendChild(request);
+                document.body.appendChild(form);
+             
+                form.submit();
+                console.log(key_code + " puss")
+        }   
+
+        setInterval(function (){
+            if(KeyIsDown(65)){POST_trans(65)}
+        },1000/60);
+        
+    </script>
+    <p>{{ key_data}}
+  </body>
+</html>

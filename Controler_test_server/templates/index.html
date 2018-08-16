@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>Video Streaming Demonstration</title>
+  </head>
+  <body>
+    <h1>Video Streaming Demonstration</h1>
+    <p><img src="{{ url_for('video_feed') }}"> </p>
+    <script type="text/javascript">
+        document.onkeydown = function(e){
+            var key_code = e.keyCode
+            var form = document.createElement('form');
+            var request = document.createElement('input');
+         
+            form.method = 'GET';
+            form.action = 'http://0.0.0.0:5000/';
+            form.ousubmit="doSomething();return false;";
+         
+            request.type = 'hidden'; //入力フォームが表示されないように
+            request.name = 'text';
+            request.value = key_code;
+         
+            form.appendChild(request);
+            document.body.appendChild(form);
+         
+            form.submit();
+
+            console.log(key_code);
+        }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <title>controler.html</title>
+  </head>
+  <body>
+    <p>iframeの内容</p>
+    <script type="text/javascript">
+        document.onkeydown = function(e){
+            var key_code = e.keyCode
+            var form = document.createElement('form');
+            var request = document.createElement('input');
+         
+            form.method = 'POST';
+            form.action = './controler.html';
+         
+            request.type = 'hidden'; //入力フォームが表示されないように
+            request.name = 'text';
+            request.value = key_code;
+         
+            form.appendChild(request);
+            document.body.appendChild(form);
+         
+            form.submit();
+
+            console.log(key_code);
+        }
+        
+    </script>
+    <p>{{ key_data}}
+  </body>
+</html>

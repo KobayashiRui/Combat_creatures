@@ -1,0 +1,21 @@
+<html>
+  <head>
+    <title>Controler</title>
+  </head>
+  <body>
+    <h1>Controler</h1>
+    <script type="text/javascript">
+        document.write("");
+        var input_keybuffer = new Array();
+        document.onkeydown =  function(e){
+            console.log(e);
+            if(e.keyCode == 87){
+                document.write("<p>{{python_data('w')}}</p>");
+            }
+            else if(e.keyCode == 65){
+                document.write("<p>{{python_data('a')}}</p>");
+            }
+        }
+    </script>
+  </body>
+</html>
