@@ -1,0 +1,81 @@
+<html>
+  <head>
+    <title>controler.html</title>
+  </head>
+  <body id="target">
+    <p id="target2">control OFF</p>
+    <script>
+        var input_key_buffer = new Array();
+        var flg=0
+        var key_code_buf = {{key_code_buf|tojson}}
+        
+        document.onkeydown = function(e){
+            //if(!e) e = window.event;
+            console.log("buf key_cod" + key_code_buf.key_code_data)
+            if(key_code_buf.key_code_data != e.keyCode){POST_trans(e.keyCode)}
+            input_key_buffer[e.keyCode] = true;
+        }
+
+        document.onkeyup = function(e){
+            //if(!e) e = window.event;
+            input_key_buffer[e.keyCode] = false;
+            POST_trans(88);
+            flg = 0;
+        }
+
+        function changeColor(idname,color){
+            var obj = document.getElementById(idname);
+            if(color == 0){
+                obj.style.backgroundColor = "#ffffff";
+            }else if(color == 1){
+            obj.style.backgroundColor = "#ff0000";
+            }
+        }
+        function changeMode(idname,mode_cont){
+            var obj = document.getElementById(idname);
+            if(mode_cont == 0){
+                obj.innerHTML = 'Control OFF';
+            }else if(mode_cont == 1){
+                obj.innerHTML = 'Control ON';
+            }
+        }
+        window.onblur = function(){
+            input_key_buffer.length = 0;
+            changeColor("target",0);
+            changeMode("target2",0);
+        }
+        window.onfocus = function(){
+            changeColor("target",1);
+            changeMode("target2",1);
+        }
+
+
+        function KeyIsDown(key_code){
+            if(input_key_buffer[key_code]){
+                return true;
+            }
+            return false;
+        }
+        
+        function POST_trans(key_code){
+                let form = document.createElement('form');
+                let request = document.createElement('input');
+             
+                form.method = 'POST';
+                form.action = './controler.html';
+             
+                request.type = 'hidden'; //入力フォームが表示されないように
+                request.name = 'text';
+                request.value = key_code;
+             
+                form.appendChild(request);
+                document.body.appendChild(form);
+             
+                form.submit();
+                console.log(key_code + " puss")
+        }   
+
+    </script>
+    <p>{{ key_data}}</p>
+  </body>
+</html>

@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>Video Streaming Demonstration</title>
+    <script>
+        function changeColor(idname,color){
+            var obj = document.getElementById(idname);
+            if(color == 0){
+                obj.style.backgroundColor = "#ffffff";
+            }else if(color == 1){
+            obj.style.backgroundColor = "#ff0000";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+        var iframeElements = document.getElementsByTagName('iframe');
+        for (var i = 0; i < iframeElements.length; i++){
+            console.log('hhhhh')
+            iframeElements[i].addEventListener('load',(function(element){
+            return function(){
+                //element.contentWindow.document.addEventListener('focus', onfocus); 
+                console.log('yyy')
+                element.contentDocument.addEventListener('focus', onfocus); 
+                element.contentWindow.document.addEventListener('blur', onblur); 
+            };
+        })(iframeElements[i]),false);
+        }
+
+        function onfocus(event){
+            console.log('フォーカス');
+            changeColor("target1",1)
+
+        }
+        function onblur(event){
+            console.log('フォーカスout');
+            changeColor("target1",0)
+        }
+        }, false);
+    </script>
+  </head>
+  <body focus= >
+    <h1>Video Streaming Demonstration</h1>
+    <p><img src="{{ url_for('video_feed') }}">
+    <iframe id="target1" src="controler.html" width="100" height="480" ></iframe>
+    </p>
+  </body>
+</html>

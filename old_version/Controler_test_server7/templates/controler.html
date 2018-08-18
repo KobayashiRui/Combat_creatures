@@ -1,0 +1,89 @@
+<html>
+  <head>
+    <title>controler.html</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  </head>
+  <body id="target">
+    <p id="mode">Control OFF</p>
+    <script type="text/javascript">
+        var input_key_buffer = new Array();
+        var flg=0
+        var key_code_buf = 0
+        
+        document.onkeydown = function(e){
+            //if(!e) e = window.event;
+            if(key_code_buf != e.keyCode){
+                var key_chardata = String.fromCharCode(e.keyCode);
+                document.getElementById('key_result').innerHTML=key_chardata;
+                //POST_trans(e.keyCode)
+                var textData = JSON.stringify({"text" : e.keyCode});
+                $.ajax({
+                    type:'POST',
+                    url:'/controler.html',
+                    data:textData,
+                    contentType:'application/json',
+                    success:function(data){
+                        console.log("post ok" + e.keyCode);
+                    }
+                });
+            }
+            key_code_buf = e.keyCode
+            input_key_buffer[e.keyCode] = true;
+        }
+
+        document.onkeyup = function(e){
+            //if(!e) e = window.event;
+            key_code_buf = 88
+            input_key_buffer[e.keyCode] = false;
+            //POST_trans(88);
+            document.getElementById('key_result').innerHTML='X';
+            var textData = JSON.stringify({"text" : 88});
+            $.ajax({
+                type:'POST',
+                url:'/controler.html',
+                data:textData,
+                contentType:'application/json',
+                success:function(data){
+                    console.log("post ok" + 88);
+                }
+            });
+        }
+
+        function changeColor(idname,color){
+            var obj = document.getElementById(idname);
+            if(color == 0){
+                obj.style.backgroundColor = "#ffffff";
+            }else if(color == 1){
+            obj.style.backgroundColor = "#ff0000";
+            }
+        }
+        function changeMode(idname,mode_cont){
+            var obj = document.getElementById(idname);
+            if(mode_cont == 0){
+                obj.innerHTML = 'Control OFF';
+            }else if(mode_cont == 1){
+                obj.innerHTML = 'Control ON';
+            }
+        }
+
+        window.onblur = function(){
+            input_key_buffer.length = 0;
+            changeColor("target",0);
+            changeMode("mode",0)
+        }
+        window.onfocus = function(){
+            changeColor("target",1);
+            changeMode("mode",1)
+        }
+
+
+        function KeyIsDown(key_code){
+            if(input_key_buffer[key_code]){
+                return true;
+            }
+            return false;
+        }
+    </script>
+    <p id="key_result">not key data</p>
+  </body>
+</html>

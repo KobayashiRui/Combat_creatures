@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from importlib import import_module
 import os
-from flask import Flask, render_template, Response,request
+from flask import Flask, render_template, Response,request,jsonify
 import serial
 
 # import camera driver
@@ -40,8 +40,8 @@ def video_feed():
 @app.route('/controler.html',methods=['GET','POST'])
 def controler():
     if request.method == 'POST':
-        print("post")
-        key = int(request.form['text'])
+        #key = int(request.json['text'])
+        key = int(request.json['text'])
         print(key)
         key_code_buf = {'key_code_data':key}
         if key in key_code_dict.keys():
@@ -49,16 +49,16 @@ def controler():
         else:
             key_data = "key_code over dictrange"
         print(key_data)
-        ser = serial.Serial('/dev/ttyACM0',baudrate=9600,timeout=0.1)
-        flag = bytes(key_data,'utf-8')
-        ser.write(flag)
-        ser.close()
+        #ser = serial.Serial('/dev/ttyACM0',baudrate=9600,timeout=0.1)
+        #flag = bytes(key_data,'utf-8')
+        #ser.write(flag)
+        #ser.close()
     else:
         key_data = "not_key"
         key_code_buf = {'key_code_data':88}
 
     """Video streaming home page."""
-    return render_template('controler.html',key_data = key_data,key_code_buf=key_code_buf)
+    return render_template('controler.html')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8000,threaded=True)
