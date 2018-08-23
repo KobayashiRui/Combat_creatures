@@ -5,11 +5,12 @@ from flask import Flask, render_template, Response,request,jsonify
 import serial
 
 # import camera driver
-if os.environ.get('CAMERA'):
-    Camera = import_module('camera_' + os.environ['CAMERA']).Camera
-else:
-    print("camera opencv")
-    from camera_opencv import Camera
+#if os.environ.get('CAMERA'):
+#    print("camera opencv yyyy")
+#    Camera = import_module('camera_' + os.environ['CAMERA']).Camera
+#else:
+#    print("camera opencv")
+from camera_opencv import Camera, Camera2
 
 key_code_dict = {88:'X',65:'A',87:'W',83:'S',68:'D',37:'←',38:'↑',39:'→',40:'↓'}
 
@@ -35,9 +36,19 @@ def gen(camera):
 @app.route('/video_feed')
 def video_feed():
     """Video streaming route. Put this in the src attribute of an img tag."""
+    global Camera
     Camera1 = Camera(1)
-    print("set source")
+    print("set source cam1")
     return Response(gen(Camera1),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+@app.route('/video_feed2')
+def video_feed2():
+    """Video streaming route. Put this in the src attribute of an img tag."""
+    global Camera2
+    Camera2 = Camera2(0)
+    print("set source cam0")
+    return Response(gen(Camera2),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/controler.html',methods=['GET','POST'])
